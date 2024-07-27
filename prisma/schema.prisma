@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users{
+  id Int @id @default(autoincrement())
+  firstname String
+  middlename String
+  lastname String
+  email String
+  password String
+  contact BigInt
+  age Int
+  isAct Boolean
+
+  UserProfiles UserProfile[]
+  TotalApplications TotalApplications[]
+  ApplicationStatus ApplicationStatus[]
+}
+
+model UserProfile{
+  id Int @id @default(autoincrement())
+  user_id Int
+  users Users @relation(fields: [user_id],references: [id])
+  Resume Bytes
+  skills String[]
+  qualification String
+  experience Boolean
+  last_job String @default("no Job")
+}
+
+model Admin{
+  id Int @id @default(autoincrement())
+  firstname String
+  middlename String
+  lastname String
+  email String
+  password String
+  contact BigInt
+  age Int
+  role String
+  company_name String
+  isAct Boolean
+
+  Jobs Jobs[]
+}
+
+model Jobs{
+  id Int @id @default(autoincrement())
+  admin_id Int
+  admins Admin @relation(fields: [admin_id],references: [id])
+  title String
+  role String
+  description String
+  jobTime String
+  salaryRange String
+  isAct Boolean
+
+  Eligblities Eligblities[]
+  JobType JobType[]
+  TotalApplications TotalApplications[]
+  ApplicationStatus ApplicationStatus[]
+}
+
+model Eligblities{
+  id Int @id @default(autoincrement())
+  job_id Int
+  jobs Jobs @relation(fields: [job_id],references: [id])
+  minimumQaulification String
+  ageLimit Int
+  minimumExperience String
+  gender Int
+}
+
+model JobType{
+  id Int @id @default(autoincrement())
+  job_id Int
+  jobs Jobs @relation(fields: [job_id],references: [id])
+  Type String
+}
+
+model TotalApplications{
+  id Int @id @default(autoincrement())
+  job_id Int
+  jobs Jobs @relation(fields: [job_id],references: [id])
+  user_id Int
+  users Users @relation(fields: [user_id],references: [id])
+}
+
+model ApplicationStatus{
+  id Int @id @default(autoincrement())
+  job_id Int
+  jobs Jobs @relation(fields: [job_id],references: [id])
+  user_id Int
+  users Users @relation(fields: [user_id],references: [id])
+  appliedDate DateTime @default(dbgenerated("(NOW() + '30 days'::interval)"))
+  currentStatus String
+  isAct Boolean
+}
