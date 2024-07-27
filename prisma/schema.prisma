@@ -13,98 +13,99 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users{
-  id Int @id @default(autoincrement())
-  firstname String
+model Users {
+  id         Int     @id @default(autoincrement())
+  firstname  String
   middlename String
-  lastname String
-  email String
-  password String
-  contact BigInt
-  age Int
-  isAct Boolean
+  lastname   String
+  email      String  @unique
+  password   String
+  contact    String
+  age        Int
+  isAct      Boolean @default(true)
 
-  UserProfiles UserProfile[]
+  UserProfiles      UserProfile[]
   TotalApplications TotalApplications[]
   ApplicationStatus ApplicationStatus[]
 }
 
-model UserProfile{
-  id Int @id @default(autoincrement())
-  user_id Int
-  users Users @relation(fields: [user_id],references: [id])
-  Resume Bytes
-  skills String[]
+model UserProfile {
+  id            Int      @id @default(autoincrement())
+  user_id       Int
+  users         Users    @relation(fields: [user_id], references: [id])
+  Resume        Bytes
+  skills        String[]
   qualification String
-  experience Boolean
-  last_job String @default("no Job")
+  experience    Boolean
+  last_job      String   @default("no Job")
 }
 
-model Admin{
-  id Int @id @default(autoincrement())
-  firstname String
-  middlename String
-  lastname String
-  email String
-  password String
-  contact BigInt
-  age Int
-  role String
+model Admin {
+  id           Int     @id @default(autoincrement())
+  firstname    String
+  middlename   String
+  lastname     String
+  email        String  @unique
+  password     String
+  contact      String
+  age          Int
+  role         String
   company_name String
-  isAct Boolean
+  isAct        Boolean @default(true)
 
   Jobs Jobs[]
 }
 
-model Jobs{
-  id Int @id @default(autoincrement())
-  admin_id Int
-  admins Admin @relation(fields: [admin_id],references: [id])
-  title String
-  role String
+model Jobs {
+  id          Int     @id @default(autoincrement())
+  admin_id    Int
+  admins      Admin   @relation(fields: [admin_id], references: [id])
+  title       String
+  role        String
   description String
-  jobTime String
+  jobTime     String
   salaryRange String
-  isAct Boolean
+  isAct       Boolean
 
-  Eligblities Eligblities[]
-  JobType JobType[]
+  Eligblities       Eligblities[]
+  JobType           JobType[]
   TotalApplications TotalApplications[]
   ApplicationStatus ApplicationStatus[]
 }
 
-model Eligblities{
-  id Int @id @default(autoincrement())
-  job_id Int
-  jobs Jobs @relation(fields: [job_id],references: [id])
+model Eligblities {
+  id                   Int      @id @default(autoincrement())
+  job_id               Int
+  jobs                 Jobs     @relation(fields: [job_id], references: [id])
   minimumQaulification String
-  ageLimit Int
-  minimumExperience String
-  gender Int
+  ageLimit             Int
+  minimumExperience    String
+  gender               Int
+  skills               String[]
 }
 
-model JobType{
-  id Int @id @default(autoincrement())
+model JobType {
+  id     Int    @id @default(autoincrement())
   job_id Int
-  jobs Jobs @relation(fields: [job_id],references: [id])
-  Type String
+  jobs   Jobs   @relation(fields: [job_id], references: [id])
+  Type   String
 }
 
-model TotalApplications{
-  id Int @id @default(autoincrement())
-  job_id Int
-  jobs Jobs @relation(fields: [job_id],references: [id])
+model TotalApplications {
+  id      Int   @id @default(autoincrement())
+  job_id  Int
+  jobs    Jobs  @relation(fields: [job_id], references: [id])
   user_id Int
-  users Users @relation(fields: [user_id],references: [id])
+  users   Users @relation(fields: [user_id], references: [id])
 }
 
-model ApplicationStatus{
-  id Int @id @default(autoincrement())
-  job_id Int
-  jobs Jobs @relation(fields: [job_id],references: [id])
-  user_id Int
-  users Users @relation(fields: [user_id],references: [id])
-  appliedDate DateTime @default(dbgenerated("(NOW() + '30 days'::interval)"))
+model ApplicationStatus {
+  id            Int      @id @default(autoincrement())
+  job_id        Int
+  jobs          Jobs     @relation(fields: [job_id], references: [id])
+  user_id       Int
+  users         Users    @relation(fields: [user_id], references: [id])
+  appliedDate   DateTime @default(dbgenerated("(NOW() + '30 days'::interval)"))
   currentStatus String
-  isAct Boolean
+  isAct         Boolean
 }

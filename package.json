@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.17.0",
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "md5": "^2.3.0",
     "prisma": "^5.17.0",
     "zod": "^3.23.8"
   }
