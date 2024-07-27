@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "firstname": "rajdeep",
+    "lastname": "dharaviya",
+    "middlename": "narotambhai",
+    "password": "87654321",
+    "email": "rajdeep@gmail.com",
+    "age": 20,
+    "role": "manager",
+    "company_name": "google",
+    "contact": "9876543210"
+  }
+]

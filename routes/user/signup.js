@@ -23,7 +23,6 @@ signupRoute.post("/", async (req, res) => {
         password: md5(body.password),
         contact: body.contact,
         age: body.age,
-        isAct: body.isAct,
       },
     });
 
