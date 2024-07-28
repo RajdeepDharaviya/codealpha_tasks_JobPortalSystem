@@ -2,57 +2,45 @@ const express = require("express");
 const { middleware } = require("../../middleware/middleware");
 const { PrismaClient } = require("@prisma/client");
 const jobsRoute = express.Router();
+const { responseCode } = require("../../config");
 const prisma = new PrismaClient();
 
 jobsRoute.use(middleware);
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/user/jobs ***************** */
 jobsRoute.get("/", async (req, res) => {
-  const userSkills = await prisma.userProfile.findUnique({
-    where: {
-      id: req.userId,
-    },
-    select: {
-      skills: true,
-    },
-  });
-
   const jobs = await prisma.jobs.findMany({
     where: {
       isAct: true,
     },
-    include: {
+    select: {
+      title: true,
+      description: true,
+      jobTime: true,
+      JobType: {
+        select: {
+          Type: true,
+        },
+      },
+      role: true,
+      salaryRange: true,
       Eligblities: {
-        where: {
-          skills: userSkills.skills.map((skill) => {
-            return skill;
-          }),
+        select: {
+          skills: true,
+          ageLimit: true,
+          gender: true,
+          minimumExperience: true,
+          minimumQaulification: true,
         },
       },
     },
   });
+  console.log(jobs);
 
   if (jobs != null) {
     res.status(responseCode.Success).json({
       message: "Jobs that match your profile",
-      jobs: jobs,
-    });
-  } else {
-    res
-      .status(responseCode.InternalServerError)
-      .send("something wrong with server , Please try again after sometime!");
-  }
-});
-
-jobsRoute.get("/alljobs", async (req, res) => {
-  const jobs = await prisma.jobs.findMany({
-    where: {
-      isAct: true,
-    },
-  });
-
-  if (jobs != null) {
-    res.status(responseCode.Success).json({
-      message: "All Jobs",
       jobs: jobs,
     });
   } else {

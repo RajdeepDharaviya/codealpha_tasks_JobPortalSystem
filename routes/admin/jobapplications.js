@@ -2,10 +2,13 @@ const express = require("express");
 const { middlewareOrg } = require("../../middleware/middleware");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const { responseCode } = require("../../config");
 const applicationRoute = express.Router();
 
 applicationRoute.use(middlewareOrg);
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/admin/applications ***************** */
 applicationRoute.get("/", async (req, res) => {
   const body = req.body;
 
@@ -14,7 +17,16 @@ applicationRoute.get("/", async (req, res) => {
       job_id: body.job_id,
     },
     select: {
-      users: true,
+      users: {
+        select: {
+          firstname: true,
+          lastname: true,
+          middlename: true,
+          contact: true,
+          email: true,
+          age: true,
+        },
+      },
       jobs: true,
     },
   });
@@ -31,6 +43,8 @@ applicationRoute.get("/", async (req, res) => {
   }
 });
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/admin/applications/selected ***************** */
 applicationRoute.get("/selected", async (req, res) => {
   const body = req.body;
 
@@ -56,7 +70,9 @@ applicationRoute.get("/selected", async (req, res) => {
   }
 });
 
-applicationRoute.post("/add", async (req, res) => {
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/admin/applications/selectApplication ***************** */
+applicationRoute.post("/selectApplication", async (req, res) => {
   const body = req.body;
 
   const selectedApplication = await prisma.selectedApplication.create({
@@ -78,20 +94,22 @@ applicationRoute.post("/add", async (req, res) => {
   }
 });
 
-applicationRoute.post("/remove", async (req, res) => {
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/admin/applications/removeApplication ***************** */
+applicationRoute.delete("/removeApplication", async (req, res) => {
   const body = req.body;
 
-  const removeApplication = await prisma.selectedApplication.update({
+  const removeApplication = await prisma.selectedApplication.delete({
     where: {
       id: body.id,
     },
-    data: {
-      job_id: body.job_id,
-      user_id: body.user_id,
+    select: {
+      job_id: true,
+      user_id: true,
     },
   });
 
-  if (selectedApplication != null) {
+  if (removeApplication != null) {
     res.status(responseCode.Success).json({
       message: "jobs applications of remove user",
       removeApplication: removeApplication,

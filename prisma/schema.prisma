@@ -68,7 +68,7 @@ model Jobs {
   description String
   jobTime     String
   salaryRange String
-  isAct       Boolean
+  isAct       Boolean @default(true)
 
   Eligblities         Eligblities[]
   JobType             JobType[]

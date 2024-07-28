@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const express = require("express");
 const { middleware } = require("../../middleware/middleware");
 const { responseCode } = require("../../config");
+const md5 = require("md5");
 const prfRoute = express.Router();
 const prisma = new PrismaClient();
 
@@ -46,7 +47,7 @@ prfRoute.post("/update", async (req, res) => {
       lastname: body.lastname,
       middlename: body.middlename,
       contact: body.contact,
-      password: body.password,
+      password: md5(body.password),
     },
   });
 

@@ -1,14 +1,17 @@
 const { PrismaClient } = require("@prisma/client");
 const express = require("express");
+const { middlewareOrg } = require("../../middleware/middleware");
+const { responseCode } = require("../../config");
 const prisma = new PrismaClient();
 const elgRoute = express.Router();
 
 elgRoute.use(middlewareOrg);
 
+// This is the route for getting all eligibilities for job
+/* ************** http://localhost:3000/admin/eligibilities/ ***************** */
 elgRoute.get("/", async (req, res) => {
   const body = req.body;
-
-  const eligibilities = await prisma.eligblities.findUnique({
+  const eligibilities = await prisma.eligblities.findMany({
     where: {
       job_id: body.job_id,
     },
@@ -17,6 +20,7 @@ elgRoute.get("/", async (req, res) => {
       gender: true,
       minimumExperience: true,
       minimumQaulification: true,
+      skills: true,
     },
   });
   if (eligibilities != null) {
@@ -31,6 +35,8 @@ elgRoute.get("/", async (req, res) => {
   }
 });
 
+// This is the route for adding eligibilities for particular job
+/* ************** http://localhost:3000/admin/eligibilities/add ***************** */
 elgRoute.post("/add", async (req, res) => {
   const body = req.body;
 
@@ -56,10 +62,12 @@ elgRoute.post("/add", async (req, res) => {
   }
 });
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/admin/eligibilities/edit ***************** */
 elgRoute.put("/edit", async (req, res) => {
   const body = req.body;
 
-  const eligibilities = await prisma.eligblities.update({
+  const eligibilities = await prisma.eligblities.updateMany({
     where: {
       job_id: body.job_id,
     },

@@ -3,9 +3,12 @@ const { middlewareOrg } = require("../../middleware/middleware");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const jobsRoute = express.Router();
+const { responseCode } = require("../../config");
 
 jobsRoute.use(middlewareOrg);
 
+// This is the route for getting all the jobs post by the admins (Active Job posts)
+/* ************** http://localhost:3000/admin/jobs/ ***************** */
 jobsRoute.get("/", async (req, res) => {
   const jobs = await prisma.jobs.findMany({
     where: {
@@ -33,6 +36,38 @@ jobsRoute.get("/", async (req, res) => {
   }
 });
 
+// This is the route for getting all the jobs post by the admins (Closed Job posts)
+/* ************** http://localhost:3000/admin/jobs/ ***************** */
+jobsRoute.get("/alljobs", async (req, res) => {
+  const jobs = await prisma.jobs.findMany({
+    where: {
+      admin_id: req.userId,
+      isAct: false,
+    },
+    select: {
+      title: true,
+      description: true,
+      jobTime: true,
+      role: true,
+      salaryRange: true,
+      JobType: true,
+    },
+  });
+
+  if (jobs != null) {
+    res.status(responseCode.Success).json({
+      message: "Posted Jobs",
+      jobs: jobs,
+    });
+  } else {
+    res
+      .status(responseCode.InternalServerError)
+      .send("Something wrong with server ,Please try again after sometime");
+  }
+});
+
+// This is the route for getting all the jobs post by the admins
+/* ************** http://localhost:3000/admin/jobs/add ***************** */
 jobsRoute.post("/add", async (req, res) => {
   const body = req.body;
 
@@ -49,6 +84,67 @@ jobsRoute.post("/add", async (req, res) => {
           Type: body.type,
         },
       },
+    },
+  });
+
+  if (job != null) {
+    res.status(responseCode.Success).json({
+      message: "Your job posted created successfully",
+      job: job,
+    });
+  } else {
+    res
+      .status(responseCode.InternalServerError)
+      .send("Something wrong with server ,Please try again after sometime");
+  }
+});
+
+// This is the route for getting all the jobs post by the admins
+/* ************** http://localhost:3000/admin/jobs/update ***************** */
+jobsRoute.put("/update", async (req, res) => {
+  const body = req.body;
+
+  const job = await prisma.jobs.update({
+    where: {
+      id: body.job_id,
+    },
+    data: {
+      title: body.title,
+      description: body.description,
+      jobTime: body.jobTime,
+      role: body.role,
+      salaryRange: body.salaryRange,
+      JobType: {
+        update: {
+          Type: body.type,
+        },
+      },
+    },
+  });
+
+  if (job != null) {
+    res.status(responseCode.Success).json({
+      message: "Your job posted created successfully",
+      job: job,
+    });
+  } else {
+    res
+      .status(responseCode.InternalServerError)
+      .send("Something wrong with server ,Please try again after sometime");
+  }
+});
+
+// This is the route for getting all the jobs post by the admins
+/* ************** http://localhost:3000/admin/jobs/delete ***************** */
+jobsRoute.delete("/delete", async (req, res) => {
+  const body = req.body;
+
+  const job = await prisma.jobs.update({
+    where: {
+      id: body.job_id,
+    },
+    data: {
+      isAct: false,
     },
   });
 

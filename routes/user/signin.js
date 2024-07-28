@@ -22,7 +22,7 @@ signinRoute.post("/", async (req, res) => {
         password: md5(body.password),
       },
     });
-
+    console.log(User);
     // give response to the User
     if (User != []) {
       const token = jwt.sign(
@@ -37,9 +37,7 @@ signinRoute.post("/", async (req, res) => {
         token: "Bearer " + token,
       });
     } else {
-      res
-        .status(responseCode.InternalServerError)
-        .send("Something wrong with server, please try again after sometime!");
+      res.status(responseCode.NotAuthorized).send("Invalid credentials!");
     }
   } else {
     res.status(responseCode.NotValid).send(signinSchema.safeParse(body).error);

@@ -13,7 +13,7 @@ userRoute.use("/signin", signinRoute);
 userRoute.use("/signup", signupRoute);
 userRoute.use("/profile", prfRoute);
 userRoute.use("/search", searchRoute);
-userRoute.use("/application", applicationRoute);
+userRoute.use("/applications", applicationRoute);
 userRoute.use("/jobs", jobsRoute);
 userRoute.use("/skills", skillRoute);
 userRoute.use("/comments", commentRoute);

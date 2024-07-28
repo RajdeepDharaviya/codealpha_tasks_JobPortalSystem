@@ -7,7 +7,7 @@ const middleware = async (req, res, next) => {
   const data = authorize.split(" ");
   if (authorize && data[0] == "Bearer") {
     const Info = jwt.verify(data[1], "mySecret");
-    console.log(Info);
+
     const verified = await prisma.users.findUnique({
       where: {
         email: Info.email,
@@ -16,7 +16,7 @@ const middleware = async (req, res, next) => {
 
     if (verified != []) {
       req.userId = Info.UserId;
-      console.log(Info.userId);
+
       next();
     }
   } else {
@@ -35,10 +35,10 @@ const middlewareOrg = async (req, res, next) => {
         email: Info.email,
       },
     });
-    console.log(Info.AdminId);
+
     if (verified != []) {
       req.userId = Info.AdminId;
-      console.log("id" + req.userId);
+
       next();
     }
   } else {

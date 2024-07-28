@@ -9,5 +9,22 @@
     "role": "manager",
     "company_name": "google",
     "contact": "9876543210"
+  },
+  {
+    "job_id": 1,
+    "title": "mern Stack",
+    "description": "In this job you will develop project uisng MERN STACK",
+    "jobTime": "8 hours day",
+    "role": "developer",
+    "salaryRange": "15000 to 25000",
+    "type": "work from office"
+  },
+  {
+    "job_id": 2,
+    "minimumExperience": "Fresher / 1 year",
+    "minimumQaulification": "Graduate",
+    "ageLimit": 25,
+    "gender": 1,
+    "skills": ["HTML", "CSS"]
   }
 ]

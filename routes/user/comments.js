@@ -2,10 +2,13 @@ const express = require("express");
 const { middleware } = require("../../middleware/middleware");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const { responseCode } = require("../../config");
 const commentRoute = express.Router();
 
 commentRoute.use(middleware);
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/user/comments/jobs ***************** */
 commentRoute.get("/jobs", async (req, res) => {
   const body = req.body;
 
@@ -17,6 +20,7 @@ commentRoute.get("/jobs", async (req, res) => {
     },
   });
 
+  console.log(comments);
   if (comments != null) {
     res.status(responseCode.Success).json({
       message: "Posted Jobs",
@@ -29,6 +33,8 @@ commentRoute.get("/jobs", async (req, res) => {
   }
 });
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/user/comments/add ***************** */
 commentRoute.post("/add", async (req, res) => {
   const body = req.body;
 
@@ -52,6 +58,8 @@ commentRoute.post("/add", async (req, res) => {
   }
 });
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/user/comments/edit ***************** */
 commentRoute.put("/edit", async (req, res) => {
   const body = req.body;
 
@@ -76,6 +84,8 @@ commentRoute.put("/edit", async (req, res) => {
   }
 });
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/user/comments/delete ***************** */
 commentRoute.delete("/delete", async (req, res) => {
   const body = req.body;
 

@@ -1,12 +1,14 @@
 const express = require("express");
 const { middleware } = require("../../middleware/middleware");
 const { PrismaClient } = require("@prisma/client");
-const { pipeline } = require("zod");
+const { responseCode } = require("../../config");
 const applicationRoute = express.Router();
 const prisma = new PrismaClient();
 
 applicationRoute.use(middleware);
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/user/applications ***************** */
 applicationRoute.get("/", async (req, res) => {
   const appliedJobs = await prisma.totalApplications.findMany({
     where: {
@@ -38,13 +40,15 @@ applicationRoute.get("/", async (req, res) => {
   }
 });
 
+// This is the route for editing eligibilities criteria for particular job
+/* ************** http://localhost:3000/user/applications/apply ***************** */
 applicationRoute.post("/apply", async (req, res) => {
   const body = req.body;
 
   const applyJob = await prisma.totalApplications.create({
     data: {
       job_id: body.job_id,
-      user_id: body.user_id,
+      user_id: req.userId,
     },
   });
 
