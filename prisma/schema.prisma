@@ -24,9 +24,11 @@ model Users {
   age        Int
   isAct      Boolean @default(true)
 
-  UserProfiles      UserProfile[]
-  TotalApplications TotalApplications[]
-  ApplicationStatus ApplicationStatus[]
+  UserProfiles        UserProfile[]
+  TotalApplications   TotalApplications[]
+  ApplicationStatus   ApplicationStatus[]
+  SelectedApplication SelectedApplication[]
+  Comments            Comments[]
 }
 
 model UserProfile {
@@ -53,7 +55,8 @@ model Admin {
   company_name String
   isAct        Boolean @default(true)
 
-  Jobs Jobs[]
+  Jobs     Jobs[]
+  Comments Comments[]
 }
 
 model Jobs {
@@ -67,10 +70,12 @@ model Jobs {
   salaryRange String
   isAct       Boolean
 
-  Eligblities       Eligblities[]
-  JobType           JobType[]
-  TotalApplications TotalApplications[]
-  ApplicationStatus ApplicationStatus[]
+  Eligblities         Eligblities[]
+  JobType             JobType[]
+  TotalApplications   TotalApplications[]
+  ApplicationStatus   ApplicationStatus[]
+  SelectedApplication SelectedApplication[]
+  Comments            Comments[]
 }
 
 model Eligblities {
@@ -108,4 +113,25 @@ model ApplicationStatus {
   appliedDate   DateTime @default(dbgenerated("(NOW() + '30 days'::interval)"))
   currentStatus String
   isAct         Boolean
+}
+
+model SelectedApplication {
+  id      Int   @id @default(autoincrement())
+  job_id  Int
+  jobs    Jobs  @relation(fields: [job_id], references: [id])
+  user_id Int
+  users   Users @relation(fields: [user_id], references: [id])
+}
+
+model Comments {
+  id           Int      @id @default(autoincrement())
+  job_id       Int
+  jobs         Jobs     @relation(fields: [job_id], references: [id])
+  user_id      Int?
+  users        Users?   @relation(fields: [user_id], references: [id])
+  admin_id     Int?
+  admins       Admin?   @relation(fields: [admin_id], references: [id])
+  comment      String
+  comment_date DateTime @default(dbgenerated("(NOW() + '30 days'::interval)"))
+  isAct        Boolean  @default(true)
 }

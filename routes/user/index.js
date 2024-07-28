@@ -6,6 +6,7 @@ const { searchRoute } = require("./search");
 const { applicationRoute } = require("./jobapplications");
 const { jobsRoute } = require("./jobs");
 const { skillRoute } = require("./skills");
+const { commentRoute } = require("./comments");
 const userRoute = express.Router();
 
 userRoute.use("/signin", signinRoute);
@@ -15,5 +16,6 @@ userRoute.use("/search", searchRoute);
 userRoute.use("/application", applicationRoute);
 userRoute.use("/jobs", jobsRoute);
 userRoute.use("/skills", skillRoute);
+userRoute.use("/comments", commentRoute);
 
 module.exports = { userRoute };
