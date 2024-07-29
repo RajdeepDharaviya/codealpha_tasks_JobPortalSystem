@@ -22,7 +22,7 @@ signinRoute.post("/", async (req, res) => {
         password: md5(body.password),
       },
     });
-    console.log(User);
+
     // give response to the User
     if (User != null) {
       const token = jwt.sign(

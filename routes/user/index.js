@@ -7,6 +7,7 @@ const { applicationRoute } = require("./jobapplications");
 const { jobsRoute } = require("./jobs");
 const { skillRoute } = require("./skills");
 const { commentRoute } = require("./comments");
+const { statusRoute } = require("./applicationStatus");
 const userRoute = express.Router();
 
 userRoute.use("/signin", signinRoute);
@@ -17,5 +18,6 @@ userRoute.use("/applications", applicationRoute);
 userRoute.use("/jobs", jobsRoute);
 userRoute.use("/skills", skillRoute);
 userRoute.use("/comments", commentRoute);
+userRoute.use("/status", statusRoute);
 
 module.exports = { userRoute };

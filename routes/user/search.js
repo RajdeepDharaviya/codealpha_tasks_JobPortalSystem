@@ -7,17 +7,14 @@ const prisma = new PrismaClient();
 
 searchRoute.use(middleware);
 
+// This is the route for searching job
+/* ************** http://localhost:3000/user/search ***************** */
 searchRoute.get("/", async (req, res) => {
   const body = req.body;
 
   const searchResult = await prisma.jobs.findMany({
     where: {
-      OR: [
-        { title: { contains: body.title } },
-        {
-          description: { contains: body.description },
-        },
-      ],
+      title: { startsWith: body.title },
     },
   });
 

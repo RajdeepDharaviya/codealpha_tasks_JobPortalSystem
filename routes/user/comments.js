@@ -7,7 +7,7 @@ const commentRoute = express.Router();
 
 commentRoute.use(middleware);
 
-// This is the route for editing eligibilities criteria for particular job
+// This is the route for gettin comments for particular job
 /* ************** http://localhost:3000/user/comments/jobs ***************** */
 commentRoute.get("/jobs", async (req, res) => {
   const body = req.body;

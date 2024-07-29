@@ -35,7 +35,7 @@ model UserProfile {
   id            Int      @id @default(autoincrement())
   user_id       Int
   users         Users    @relation(fields: [user_id], references: [id])
-  Resume        Bytes
+  Resume        Bytes?
   skills        String[]
   qualification String
   experience    Boolean

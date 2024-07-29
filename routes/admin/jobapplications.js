@@ -7,7 +7,7 @@ const applicationRoute = express.Router();
 
 applicationRoute.use(middlewareOrg);
 
-// This is the route for editing eligibilities criteria for particular job
+// This is the route for getting jobs application for particular job
 /* ************** http://localhost:3000/admin/applications ***************** */
 applicationRoute.get("/", async (req, res) => {
   const body = req.body;
@@ -43,7 +43,7 @@ applicationRoute.get("/", async (req, res) => {
   }
 });
 
-// This is the route for editing eligibilities criteria for particular job
+// This is the route for getting  selected job application for particular job
 /* ************** http://localhost:3000/admin/applications/selected ***************** */
 applicationRoute.get("/selected", async (req, res) => {
   const body = req.body;
@@ -70,7 +70,7 @@ applicationRoute.get("/selected", async (req, res) => {
   }
 });
 
-// This is the route for editing eligibilities criteria for particular job
+// This is the route for selecting job applications for particular job
 /* ************** http://localhost:3000/admin/applications/selectApplication ***************** */
 applicationRoute.post("/selectApplication", async (req, res) => {
   const body = req.body;
@@ -82,7 +82,7 @@ applicationRoute.post("/selectApplication", async (req, res) => {
     },
   });
 
-  const approvedStatus = await prisma.applicationStatus.update({
+  const approvedStatus = await prisma.applicationStatus.updateMany({
     where: {
       user_id: body.user_id,
       job_id: body.job_id,
@@ -104,7 +104,34 @@ applicationRoute.post("/selectApplication", async (req, res) => {
   }
 });
 
-// This is the route for editing eligibilities criteria for particular job
+// This is the route for rejecting job applications for particular job
+/* ************** http://localhost:3000/admin/applications/rejectApplication ***************** */
+applicationRoute.post("/rejectApplication", async (req, res) => {
+  const body = req.body;
+
+  const approvedStatus = await prisma.applicationStatus.updateMany({
+    where: {
+      user_id: body.user_id,
+      job_id: body.job_id,
+    },
+    data: {
+      currentStatus: "rejected",
+    },
+  });
+
+  if (approvedStatus != null) {
+    res.status(responseCode.Success).json({
+      message: "jobs applications of rejected users",
+      approvedStatus: approvedStatus,
+    });
+  } else {
+    res
+      .status(responseCode.InternalServerError)
+      .send("Something wrong with server ,Please try again after sometime");
+  }
+});
+
+// This is the route for remove applications for particular job
 /* ************** http://localhost:3000/admin/applications/removeApplication ***************** */
 applicationRoute.delete("/removeApplication", async (req, res) => {
   const body = req.body;

@@ -7,6 +7,8 @@ const prisma = new PrismaClient();
 
 skillRoute.use(middleware);
 
+// This is the route for getting skills
+/* ************** http://localhost:3000/user/skills ***************** */
 skillRoute.get("/", async (req, res) => {
   const skills = await prisma.userProfile.findUnique({
     where: {
@@ -32,6 +34,8 @@ skillRoute.get("/", async (req, res) => {
   }
 });
 
+// This is the route for adding skills
+/* ************** http://localhost:3000/user/skills/add ***************** */
 skillRoute.post("/add", async (req, res) => {
   const body = req.body;
   const skills = await prisma.userProfile.create({
@@ -40,7 +44,7 @@ skillRoute.post("/add", async (req, res) => {
       skills: body.skills,
       qualification: body.qualification,
       last_job: body.last_job,
-      id: req.userId,
+      user_id: req.userId,
     },
   });
 
@@ -56,11 +60,14 @@ skillRoute.post("/add", async (req, res) => {
   }
 });
 
+// This is the route for editing skills
+/* ************** http://localhost:3000/user/skills ***************** */
 skillRoute.put("/edit", async (req, res) => {
   const body = req.body;
   const skills = await prisma.userProfile.update({
     where: {
-      id: req.userId,
+      user_id: req.userId,
+      id: body.id,
     },
     data: {
       experience: body.experience,

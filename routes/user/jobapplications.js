@@ -56,6 +56,7 @@ applicationRoute.post("/apply", async (req, res) => {
       currentStatus: "pending",
       job_id: body.job_id,
       user_id: req.userId,
+      isAct: true,
     },
   });
   if (applyJob != null && applicationStatus != null) {

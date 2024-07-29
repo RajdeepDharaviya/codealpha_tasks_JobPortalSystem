@@ -13,6 +13,7 @@ jobsRoute.get("/", async (req, res) => {
   const jobs = await prisma.jobs.findMany({
     where: {
       admin_id: req.userId,
+      isAct: true,
     },
     select: {
       title: true,
@@ -115,8 +116,13 @@ jobsRoute.put("/update", async (req, res) => {
       role: body.role,
       salaryRange: body.salaryRange,
       JobType: {
-        update: {
-          Type: body.type,
+        updateMany: {
+          where: {
+            job_id: body.job_id,
+          },
+          data: {
+            Type: body.type,
+          },
         },
       },
     },

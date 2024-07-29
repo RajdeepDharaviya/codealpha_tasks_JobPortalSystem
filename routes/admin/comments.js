@@ -31,7 +31,7 @@ commentRoute.get("/jobs", async (req, res) => {
   }
 });
 
-// This is the route for editing eligibilities criteria for particular job
+// This is the route for adding comments to job posts criteria for particular job
 /* ************** http://localhost:3000/admin/comments/add ***************** */
 commentRoute.post("/add", async (req, res) => {
   const body = req.body;
@@ -61,7 +61,7 @@ commentRoute.post("/add", async (req, res) => {
   }
 });
 
-// This is the route for editing eligibilities criteria for particular job
+// This is the route for editing comments for particular job post
 /* ************** http://localhost:3000/admin/comments/edit ***************** */
 commentRoute.put("/edit", async (req, res) => {
   const body = req.body;
@@ -87,8 +87,8 @@ commentRoute.put("/edit", async (req, res) => {
   }
 });
 
-// This is the route for editing eligibilities criteria for particular job
-/* ************** http://localhost:3000/admin/comments ***************** */
+// This is the route for delete comments  for particular job
+/* ************** http://localhost:3000/admin/comments/delete ***************** */
 commentRoute.delete("/delete", async (req, res) => {
   const body = req.body;
 
