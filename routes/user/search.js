@@ -13,9 +13,9 @@ searchRoute.get("/", async (req, res) => {
   const searchResult = await prisma.jobs.findMany({
     where: {
       OR: [
-        { title: body.title },
+        { title: { contains: body.title } },
         {
-          description: body.description,
+          description: { contains: body.description },
         },
       ],
     },
