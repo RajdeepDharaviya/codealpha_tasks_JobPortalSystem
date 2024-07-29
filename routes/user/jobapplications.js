@@ -51,8 +51,14 @@ applicationRoute.post("/apply", async (req, res) => {
       user_id: req.userId,
     },
   });
-
-  if (applyJob != null) {
+  const applicationStatus = await prisma.applicationStatus.create({
+    data: {
+      currentStatus: "pending",
+      job_id: body.job_id,
+      user_id: req.userId,
+    },
+  });
+  if (applyJob != null && applicationStatus != null) {
     res.status(responseCode.Success).json({
       message: "Applied for Jobs",
       applyJob: applyJob,

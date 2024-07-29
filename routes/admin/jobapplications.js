@@ -82,7 +82,17 @@ applicationRoute.post("/selectApplication", async (req, res) => {
     },
   });
 
-  if (selectedApplication != null) {
+  const approvedStatus = await prisma.applicationStatus.update({
+    where: {
+      user_id: body.user_id,
+      job_id: body.job_id,
+    },
+    data: {
+      currentStatus: "approved",
+    },
+  });
+
+  if (selectedApplication != null && approvedStatus != null) {
     res.status(responseCode.Success).json({
       message: "jobs applications of selected users",
       selectedApplication: selectedApplication,
