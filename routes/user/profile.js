@@ -3,8 +3,10 @@ const express = require("express");
 const { middleware } = require("../../middleware/middleware");
 const { responseCode } = require("../../config");
 const md5 = require("md5");
+const multer = require("multer");
 const prfRoute = express.Router();
 const prisma = new PrismaClient();
+const upload = multer({ storage: multer.memoryStorage() });
 
 prfRoute.use(middleware);
 
@@ -60,6 +62,30 @@ prfRoute.post("/update", async (req, res) => {
     res
       .status(responseCode.InternalServerError)
       .send("Something wrong with server ,Please try again after sometime");
+  }
+});
+
+prfRoute.post("/addResume", upload.single("file"), async (req, res) => {
+  const { file } = req;
+
+  if (file) {
+    const resume = await prisma.resumes.create({
+      data: {
+        user_id: req.userId,
+        resume: file.buffer,
+      },
+    });
+
+    if (resume != null) {
+      res.status(responseCode.Success).json({
+        message: "Resume added",
+        resume: resume,
+      });
+    } else {
+      res
+        .status(responseCode.InternalServerError)
+        .send("Something wrong with server ,Please try again after sometime");
+    }
   }
 });
 

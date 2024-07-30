@@ -43,6 +43,28 @@ applicationRoute.get("/", async (req, res) => {
   }
 });
 
+// This is the route for getting resume for particular indivisual
+/* ************** http://localhost:3000/admin/applications/resume/:id ***************** */
+applicationRoute.get("/resume/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const resume = await prisma.resumes.findMany({
+    where: {
+      user_id: id,
+    },
+    select: {
+      resume: true,
+    },
+  });
+  if (!resume) {
+    res.status(responseCode.NotFound).send("Not found");
+  } else {
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename=${pdf.name}`);
+    res.send(resume.file);
+  }
+});
+
 // This is the route for getting  selected job application for particular job
 /* ************** http://localhost:3000/admin/applications/selected ***************** */
 applicationRoute.get("/selected", async (req, res) => {

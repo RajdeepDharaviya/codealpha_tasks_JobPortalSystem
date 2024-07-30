@@ -29,17 +29,24 @@ model Users {
   ApplicationStatus   ApplicationStatus[]
   SelectedApplication SelectedApplication[]
   Comments            Comments[]
+  Resumes             Resumes[]
 }
 
 model UserProfile {
   id            Int      @id @default(autoincrement())
   user_id       Int
   users         Users    @relation(fields: [user_id], references: [id])
-  Resume        Bytes?
   skills        String[]
   qualification String
   experience    Boolean
   last_job      String   @default("no Job")
+}
+
+model Resumes {
+  id      Int    @id @default(autoincrement())
+  user_id Int    @unique
+  users   Users  @relation(fields: [user_id], references: [id])
+  resume  Bytes?
 }
 
 model Admin {
